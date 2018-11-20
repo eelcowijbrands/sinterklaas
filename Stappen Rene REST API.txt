@@ -1,0 +1,82 @@
+Errors n.a.v. stappenplan REST API van Rene 
+https://github.com/otech-nl/CodeGorilla/tree/REST_API
+
+
+C:\Users\Eelco\Documents\compdocuments\sinterklaas>php artisan make:model Ad -m
+Model created successfully.
+Created Migration: 2018_11_20_101838_create_ads_table
+
+C:\Users\Eelco\Documents\compdocuments\sinterklaas>php artisan migrate
+Migration table created successfully.
+Migrating: 2014_10_12_000000_create_users_table
+
+   Illuminate\Database\QueryException  : SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 1000 bytes (SQL: alter table `users` add unique `users_email_unique`(`email`))
+
+  at C:\Users\Eelco\Documents\compdocuments\sinterklaas\vendor\laravel\framework\src\Illuminate\Database\Connection.php:664
+    660|         // If an exception occurs when attempting to run a query, we'll format the error
+    661|         // message to include the bindings with SQL, which will make this exception a
+    662|         // lot more helpful to the developer instead of just the database's errors.
+    663|         catch (Exception $e) {
+  > 664|             throw new QueryException(
+    665|                 $query, $this->prepareBindings($bindings), $e
+    666|             );
+    667|         }
+    668|
+
+  Exception trace:
+
+  1   PDOException::("SQLSTATE[42000]: Syntax error or access violation: 1071 Specified key was too long; max key length is 1000 bytes")
+      C:\Users\Eelco\Documents\compdocuments\sinterklaas\vendor\laravel\framework\src\Illuminate\Database\Connection.php:458
+
+  2   PDOStatement::execute()
+      C:\Users\Eelco\Documents\compdocuments\sinterklaas\vendor\laravel\framework\src\Illuminate\Database\Connection.php:458
+
+  Please use the argument -v to see more details.
+
+OPLOSSING: 
+voeg: 
+
+use Illuminate\Support\Facades\Schema;
+
+toe aan AppServiceProvider.php
+
+en voeg:
+
+Schema::defaultStringLength(191);
+
+toe aan AppServiceProvider.php
+public function boot()
+    {
+        Schema::defaultStringLength(191); //
+    }
+
+Eventueel met: php artisan migrate:fresh
+
+zie ook: https://laravel-news.com/laravel-5-4-key-too-long-error
+
+----
+
+C:\Users\Eelco\Documents\compdocuments\sinterklaas>php artisan make:seeder AdSeeder
+Seeder created successfully.
+
+C:\Users\Eelco\Documents\compdocuments\sinterklaas>composer dumpautoload
+Generating optimized autoload files
+> Illuminate\Foundation\ComposerScripts::postAutoloadDump
+> @php artisan package:discover --ansi
+Discovered Package: [32mbeyondcode/laravel-dump-server[39m
+Discovered Package: [32mfideloper/proxy[39m
+Discovered Package: [32mlaravel/tinker[39m
+Discovered Package: [32mnesbot/carbon[39m
+Discovered Package: [32mnunomaduro/collision[39m
+[32mPackage manifest generated successfully.[39m
+
+C:\Users\Eelco\Documents\compdocuments\sinterklaas>php db:seed
+Could not open input file: db:seed
+
+OPLOSSING:
+Bij het database seeden kun je tegen het probleem aanlopen dat met het commando php artisan db:seed niets gebeurt.
+Dit komt doordat standaard de vooraangemaakte DatabaseSeeder wordt aangeroepen, welke leeg is.
+Wil je je aangemaakte AdSeeder (of hoe je hem ook hebt genoemd) gebruiken, gebruik dan het commando php artisan db:seed --class=[naam van je seeder]
+
+C:\Users\Eelco\Documents\compdocuments\sinterklaas>php artisan db:seed --class=AdSeeder
+Database seeding completed successfully.
