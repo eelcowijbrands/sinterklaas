@@ -1,0 +1,15 @@
+#myVideo {
+    display: flex;
+    min-width: 100%;
+}
+
+.content {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    color: #f1f1f1;
+}
