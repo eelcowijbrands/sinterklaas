@@ -11,8 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PagesController@home');
+Route::get('/kleurplaat', 'PagesController@kleuren');
+Route::get('/contact-sint', 'PagesController@contact');
+Route::get('/over-sint', 'PagesController@about');
 
 Route::apiResource('api/ad', 'API\AdController');
